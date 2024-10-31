@@ -32,7 +32,7 @@ export default function Hero() {
           <span className="gradient-text">
             <TypewriterComponent
               options={{
-                strings: ["Hey There! 👋", "I&apos;m Meet Shah"],
+                strings: ["Hey There! 👋", "I'm Meet Shah"],
                 autoStart: true,
                 loop: true,
                 deleteSpeed: 50,
