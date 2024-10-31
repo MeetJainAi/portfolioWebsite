@@ -17,7 +17,7 @@ export default function AIAssistant() {
             className="mb-4 p-4 bg-neural/10 backdrop-blur-sm rounded-lg w-72"
           >
             <div className="text-sm text-cloud">
-              Hi! I'm an AI assistant. I can help you navigate through the portfolio.
+              Hi! I&apos;m an AI assistant. I can help you navigate through the portfolio.
             </div>
           </motion.div>
         )}

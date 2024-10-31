@@ -51,9 +51,9 @@ export default function Contact() {
     <section ref={ref} className="min-h-screen bg-space/95 py-20 px-4 md:px-8" id="contact">
       <motion.div className="max-w-4xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-6 text-electric">Let's Connect!</h2>
+          <h2 className="text-4xl font-bold mb-6 text-electric">Let&apos;s Connect!</h2>
           <p className="text-xl text-cloud/90 mb-8">
-            I'm currently open to new opportunities! If you're looking for a passionate ML/Cloud Engineer, let's talk.
+            I&apos;m currently open to new opportunities! If you&apos;re looking for a passionate ML/Cloud Engineer, let&apos;s talk.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center">

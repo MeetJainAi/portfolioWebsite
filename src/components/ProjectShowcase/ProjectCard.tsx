@@ -59,11 +59,11 @@ export default function ProjectCard({ project, index, inView }: ProjectCardProps
             <a href={project.githubUrl} className="flex-1 text-center py-2 bg-electric/20 rounded-lg hover:bg-electric/30 transition-colors">
               View Code
             </a>
-            {project.liveUrl && (
+            {/* {project.liveUrl && (
               <a href={project.liveUrl} className="flex-1 text-center py-2 bg-neural/20 rounded-lg hover:bg-neural/30 transition-colors">
                 Live Demo
               </a>
-            )}
+            )} */}
           </div>
         </div>
       </motion.div>
