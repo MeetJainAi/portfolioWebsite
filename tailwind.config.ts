@@ -9,11 +9,18 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        'space': '#0A192F',
+        'space-light': '#112240',
+        'electric': '#64FFDA',
+        'neural': '#8892b0',
+        'cloud': '#E6F1FF',
       },
+      zIndex: {
+        '-1': '-1',
+      }
     },
   },
   plugins: [],
 };
+
 export default config;
