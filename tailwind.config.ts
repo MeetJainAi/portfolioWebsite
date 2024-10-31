@@ -15,6 +15,9 @@ const config: Config = {
         'neural': '#8892b0',
         'cloud': '#E6F1FF',
       },
+      backgroundImage: {
+        'gradient-electric': 'linear-gradient(to right, #64FFDA, #66a6ff, #fad0c4)',
+      },
       zIndex: {
         '-1': '-1',
       }

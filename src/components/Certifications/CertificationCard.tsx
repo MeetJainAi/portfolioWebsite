@@ -3,18 +3,16 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 
-interface Certification {
-  id: number;
-  title: string;
-  issuer: string;
-  date: string;
-  image: string;
-  credentialUrl: string;
-  skills: string[];
-}
-
 interface CertificationCardProps {
-  certification: Certification;
+  certification: {
+    id: number;
+    title: string;
+    issuer: string;
+    date: string;
+    image: string;
+    credentialUrl: string;
+    skills: string[];
+  };
   index: number;
   inView: boolean;
 }
@@ -33,21 +31,22 @@ export default function CertificationCard({ certification, index, inView }: Cert
         rel="noopener noreferrer"
         className="block bg-neural/10 rounded-lg overflow-hidden hover:transform hover:scale-105 transition-all duration-300"
       >
-        <div className="relative h-48">
+        <div className="relative h-48 w-full">
           <Image
             src={certification.image}
             alt={certification.title}
             fill
-            className="object-cover"
+            className="object-contain p-4"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-space/80 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-space/80 via-transparent to-transparent" />
         </div>
         
-        <div className="p-4">
-          <h3 className="text-lg font-semibold mb-1 text-electric truncate">
+        <div className="p-6">
+          <h3 className="text-lg font-semibold mb-1 text-electric">
             {certification.title}
           </h3>
-          <p className="text-sm text-cloud/80 mb-2">
+          <p className="text-sm text-cloud/80 mb-3">
             {certification.issuer} • {certification.date}
           </p>
           <div className="flex flex-wrap gap-2">

@@ -8,17 +8,22 @@
   }
   
   body {
-    @apply bg-[#0A192F];
+    @apply bg-gradient-to-b from-[#0A192F] to-[#112240] text-[#E6F1FF];
   }
 }
 
 @layer components {
-  .section-padding {
-    @apply py-24 px-4 md:px-8;
+  .glass-card {
+    @apply bg-white/5 backdrop-blur-lg border border-white/10 rounded-xl;
   }
   
-  .section-container {
-    @apply max-w-6xl mx-auto;
+  .gradient-text {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(to right, #64FFDA, #66a6ff, #fad0c4);
+  }
+  
+  .hover-scale {
+    @apply transform transition-transform hover:scale-105;
   }
 }
 

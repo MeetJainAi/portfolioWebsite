@@ -14,82 +14,56 @@ interface ProjectCardProps {
 }
 
 export default function ProjectCard({ project, index, inView }: ProjectCardProps) {
-  const [isFlipped, setIsFlipped] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 50 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ delay: index * 0.2 }}
-      className="relative h-[400px] group perspective"
-      onHoverStart={() => setIsFlipped(true)}
-      onHoverEnd={() => setIsFlipped(false)}
+      className="relative group"
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
     >
       <motion.div
-        animate={{ rotateY: isFlipped ? 180 : 0 }}
-        transition={{ duration: 0.6 }}
-        className="w-full h-full preserve-3d"
+        animate={{
+          scale: isHovered ? 1.05 : 1,
+          y: isHovered ? -10 : 0
+        }}
+        transition={{ duration: 0.3 }}
+        className="bg-neural/10 backdrop-blur-md rounded-xl overflow-hidden border border-electric/20"
       >
-        {/* Front of card */}
-        <div className="absolute w-full h-full backface-hidden">
-          <div className="bg-neural/10 p-6 rounded-lg h-full">
-            <Image
-              src={project.image}
-              alt={project.title}
-              width={400}
-              height={200}
-              className="rounded-lg mb-4"
-            />
-            <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
-            <p className="text-cloud/80 text-sm mb-4">{project.description}</p>
-            <div className="flex flex-wrap gap-2">
-              {project.techStack.map((tech) => (
-                <span
-                  key={tech}
-                  className="px-2 py-1 bg-electric/20 rounded-full text-xs text-electric"
-                >
-                  {tech}
-                </span>
-              ))}
-            </div>
-          </div>
+        <div className="relative h-48 overflow-hidden">
+          <Image
+            src={project.image}
+            alt={project.title}
+            fill
+            className="object-cover transition-transform duration-300 group-hover:scale-110"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-neural/80 to-transparent" />
         </div>
 
-        {/* Back of card */}
-        <div className="absolute w-full h-full backface-hidden rotateY-180">
-          <div className="bg-neural/10 p-6 rounded-lg h-full flex flex-col justify-between">
-            <div>
-              <h3 className="text-xl font-semibold mb-4">Key Metrics</h3>
-              {project.metrics.map((metric, i) => (
-                <div key={i} className="mb-3">
-                  <div className="text-sm text-cloud/80">{metric.label}</div>
-                  <div className="text-electric text-lg font-semibold">
-                    {metric.value}
-                  </div>
-                </div>
-              ))}
-            </div>
-            
-            <div className="flex gap-4">
-              <a
-                href={project.githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-4 py-2 bg-electric text-space rounded-lg text-sm hover:bg-electric/80 transition-colors"
-              >
-                View Code
+        <div className="p-6">
+          <h3 className="text-xl font-semibold mb-3 text-electric">{project.title}</h3>
+          <p className="text-cloud/80 text-sm mb-4">{project.description}</p>
+          
+          <div className="flex flex-wrap gap-2 mb-4">
+            {project.techStack.map((tech) => (
+              <span key={tech} className="px-3 py-1 bg-electric/10 rounded-full text-xs font-medium text-electric">
+                {tech}
+              </span>
+            ))}
+          </div>
+
+          <div className="flex gap-4 mt-auto">
+            <a href={project.githubUrl} className="flex-1 text-center py-2 bg-electric/20 rounded-lg hover:bg-electric/30 transition-colors">
+              View Code
+            </a>
+            {project.liveUrl && (
+              <a href={project.liveUrl} className="flex-1 text-center py-2 bg-neural/20 rounded-lg hover:bg-neural/30 transition-colors">
+                Live Demo
               </a>
-              {project.liveUrl && (
-                <a
-                  href={project.liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-4 py-2 bg-neural text-cloud rounded-lg text-sm hover:bg-neural/80 transition-colors"
-                >
-                  Live Demo
-                </a>
-              )}
-            </div>
+            )}
           </div>
         </div>
       </motion.div>

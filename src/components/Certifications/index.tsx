@@ -50,25 +50,28 @@ export default function Certifications() {
   });
 
   return (
-    <section ref={ref} className="min-h-screen bg-space/95 py-20 px-4 md:px-8">
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        animate={inView ? { opacity: 1, y: 0 } : {}}
-        className="max-w-6xl mx-auto"
-      >
-        <h2 className="text-4xl font-bold mb-12 text-electric">Certifications</h2>
-        
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {certifications.map((cert, index) => (
-            <CertificationCard 
-              key={cert.id} 
-              certification={cert} 
-              index={index}
-              inView={inView}
-            />
-          ))}
-        </div>
-      </motion.div>
+    <section className="py-20">
+      <div className="container mx-auto px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5 }}
+          ref={ref}
+        >
+          <h2 className="text-4xl font-bold mb-12 text-electric">Certifications</h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {certifications.map((cert, index) => (
+              <CertificationCard
+                key={cert.id}
+                certification={cert}
+                index={index}
+                inView={inView}
+              />
+            ))}
+          </div>
+        </motion.div>
+      </div>
     </section>
   );
 }

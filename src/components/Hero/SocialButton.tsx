@@ -6,9 +6,10 @@ import { HiDocument } from 'react-icons/hi';
 interface SocialButtonProps {
   href: string;
   icon: 'github' | 'linkedin' | 'document';
+  className?: string;
 }
 
-export default function SocialButton({ href, icon }: SocialButtonProps) {
+export default function SocialButton({ href, icon, className }: SocialButtonProps) {
   const getIcon = () => {
     switch (icon) {
       case 'github':
@@ -25,7 +26,7 @@ export default function SocialButton({ href, icon }: SocialButtonProps) {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-block p-3 bg-neural/10 rounded-full hover:bg-neural/20 transition-colors"
+      className={`inline-block p-3 bg-neural/10 rounded-full hover:bg-neural/20 transition-colors ${className}`}
     >
       {getIcon()}
     </a>
