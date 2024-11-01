@@ -73,7 +73,7 @@ export default function Contact() {
             </motion.a>
 
             <motion.a 
-              href="/resume.pdf"
+              href="https://drive.google.com/file/d/1tMkqxzBMk9JHjbAPQy74RIwIEspEG7n4/view?usp=sharing"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="group relative inline-flex items-center justify-center px-8 py-4 bg-electric text-space font-medium rounded-lg overflow-hidden transition-all hover:bg-electric/90"

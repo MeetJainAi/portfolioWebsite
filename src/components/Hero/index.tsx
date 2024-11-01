@@ -60,7 +60,7 @@ export default function Hero() {
         >
           <SocialButton href="https://github.com" icon="github" />
           <SocialButton href="https://linkedin.com" icon="linkedin" />
-          <SocialButton href="/resume.pdf" icon="document" />
+          <SocialButton href="https://drive.google.com/file/d/1tMkqxzBMk9JHjbAPQy74RIwIEspEG7n4/view?usp=sharing" icon="document" />
         </motion.div>
       </div>
     </div>
