@@ -58,8 +58,8 @@ export default function Hero() {
           transition={{ duration: 0.5, delay: 2.5 }}
           className="flex gap-4"
         >
-          <SocialButton href="https://github.com" icon="github" />
-          <SocialButton href="https://linkedin.com" icon="linkedin" />
+          <SocialButton href="https://github.com/MeetJainAi" icon="github" />
+          <SocialButton href="https://www.linkedin.com/in/meetjain/" icon="linkedin" />
           <SocialButton href="https://drive.google.com/file/d/1tMkqxzBMk9JHjbAPQy74RIwIEspEG7n4/view?usp=sharing" icon="document" />
         </motion.div>
       </div>
