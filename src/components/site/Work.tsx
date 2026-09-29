@@ -1,121 +1,138 @@
 "use client";
 
+import { motion, useReducedMotion } from "framer-motion";
 import { projects } from "@/data/portfolio";
-import Frame from "./Frame";
-import { useFocus } from "./focus";
 
-function PipelineSchematic() {
-  const steps = ["Actions", "Docker", "SageMaker", "MLflow"];
-  return (
-    <svg viewBox="0 0 640 210" className="h-auto w-full font-mono" role="img" aria-label="Pipeline from GitHub Actions through Docker and SageMaker to MLflow, with a monitoring loop">
-      {steps.map((step, index) => (
-        <g key={step}>
-          <g transform={`translate(${20 + index * 158}, 36)`}>
-            <rect width="120" height="58" fill="#1C1A16" stroke="rgba(244,240,230,0.7)" />
-            <text x="60" y="35" textAnchor="middle" fill="#F4F0E6" fontSize="13">
-              {step}
-            </text>
-          </g>
-          {index < steps.length - 1 && (
-            <g transform={`translate(${140 + index * 158}, 65)`}>
-              <line x1="0" y1="0" x2="28" y2="0" stroke="#FF5C39" strokeWidth="2" />
-              <polygon points="28,0 20,-5 20,5" fill="#FF5C39" />
-            </g>
-          )}
-        </g>
-      ))}
-      <path d="M554 94 C554 168, 80 168, 80 94" fill="none" stroke="#C8F54B" strokeWidth="1.5" />
-      <text x="320" y="178" textAnchor="middle" fill="#C8F54B" fontSize="12">
-        live metrics
-      </text>
-    </svg>
-  );
-}
+const visuals = [
+  {
+    wash: "from-[#3a2418] via-[#14121a] to-[#0c0c12]",
+    glow: "bg-[#e8a06a]",
+    steps: [
+      { label: "Actions", className: "left-[6%] top-[42%]" },
+      { label: "Docker", className: "left-[30%] top-[28%]" },
+      { label: "SageMaker", className: "left-[54%] top-[46%]" },
+      { label: "MLflow", className: "left-[76%] top-[24%]" },
+    ],
+  },
+  {
+    wash: "from-[#102028] via-[#12101c] to-[#0c0c12]",
+    glow: "bg-[#5ec4d6]",
+    steps: [
+      { label: "AWS", className: "left-[38%] top-[12%]" },
+      { label: "Azure", className: "left-[8%] top-[58%]" },
+      { label: "GCP", className: "left-[68%] top-[58%]" },
+    ],
+  },
+];
 
-function CloudSchematic() {
-  const clouds = [
-    { name: "AWS", x: 320, y: 48 },
-    { name: "Azure", x: 96, y: 230 },
-    { name: "GCP", x: 544, y: 230 },
-  ];
+function StageVisual({ index }: { index: number }) {
+  const visual = visuals[index];
   return (
-    <svg viewBox="0 0 640 300" className="h-auto w-full font-mono" role="img" aria-label="AWS, Azure, and GCP connected through Terraform and Kubernetes">
-      <polygon points="320,48 96,230 544,230" fill="none" stroke="rgba(244,240,230,0.35)" />
-      {clouds.map((cloud) => (
-        <line key={cloud.name} x1="320" y1="150" x2={cloud.x} y2={cloud.y} stroke="#FF5C39" strokeWidth="1.25" />
+    <div className={`relative min-h-[320px] overflow-hidden rounded-[24px] bg-gradient-to-br ${visual.wash} lg:min-h-full`}>
+      <div className={`absolute left-1/2 top-1/2 h-56 w-56 -translate-x-1/2 -translate-y-1/2 rounded-full ${visual.glow} opacity-30 blur-3xl`} />
+      <svg className="absolute inset-0 h-full w-full" viewBox="0 0 600 420" preserveAspectRatio="none" aria-hidden>
+        <defs>
+          <linearGradient id={`flow-${index}`} x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#e8a06a" />
+            <stop offset="55%" stopColor="#fff6ec" />
+            <stop offset="100%" stopColor="#7c6cf5" />
+          </linearGradient>
+        </defs>
+        {index === 0 ? (
+          <path
+            d="M70 210 C 160 120, 220 120, 280 180 S 400 250, 520 130"
+            fill="none"
+            stroke={`url(#flow-${index})`}
+            strokeWidth="3"
+            strokeLinecap="round"
+          />
+        ) : (
+          <path
+            d="M300 90 L 120 280 L 480 280 Z"
+            fill="none"
+            stroke={`url(#flow-${index})`}
+            strokeWidth="2.5"
+            strokeLinejoin="round"
+          />
+        )}
+      </svg>
+      {visual.steps.map((step) => (
+        <div
+          key={step.label}
+          className={`absolute ${step.className} rounded-full border border-white/25 bg-black/40 px-4 py-3 text-[11px] uppercase tracking-[0.16em] text-white shadow-[0_0_36px_rgba(232,160,106,0.35)] backdrop-blur-md`}
+        >
+          {step.label}
+        </div>
       ))}
-      {clouds.map((cloud) => (
-        <g key={cloud.name}>
-          <circle cx={cloud.x} cy={cloud.y} r="28" fill="#1C1A16" stroke="rgba(244,240,230,0.7)" />
-          <text x={cloud.x} y={cloud.y + 4} textAnchor="middle" fill="#F4F0E6" fontSize="12">
-            {cloud.name}
-          </text>
-        </g>
-      ))}
-      <rect x="248" y="124" width="144" height="52" fill="#12110E" stroke="#C8F54B" />
-      <text x="320" y="146" textAnchor="middle" fill="#C8F54B" fontSize="11">
-        TERRAFORM
-      </text>
-      <text x="320" y="164" textAnchor="middle" fill="#F4F0E6" fontSize="11">
-        KUBERNETES
-      </text>
-    </svg>
+      {index === 1 && (
+        <div className="absolute left-1/2 top-[46%] -translate-x-1/2 rounded-full border border-[#c8f54b]/40 bg-black/50 px-4 py-2 text-[10px] uppercase tracking-[0.18em] text-[#d6f58a] backdrop-blur-md">
+          Terraform · Kubernetes
+        </div>
+      )}
+    </div>
   );
 }
 
 export default function Work() {
-  const { focus } = useFocus();
+  const reduce = useReducedMotion();
 
   return (
-    <section id="work" className="scroll-mt-16 border-t border-bone/10 px-5 py-20 md:scroll-mt-10 md:px-10 md:py-28">
-      <p className="font-mono text-[11px] tracking-[0.28em] text-signal uppercase">01 / Work</p>
-      <h2 className="mt-3 font-serif text-5xl tracking-tight md:text-7xl">Selected work</h2>
+    <section id="work" className="scroll-mt-24 px-5 py-24 md:px-8 md:py-32">
+      <div className="mx-auto max-w-6xl">
+        <p className="text-xs uppercase tracking-[0.32em] text-[#e8a06a]">Selected work</p>
+        <h2 className="mt-3 max-w-3xl font-serif text-5xl leading-[0.95] tracking-tight md:text-7xl">
+          Two systems, built to run.
+        </h2>
 
-      <div className="mt-14 space-y-20">
-        {projects.map((project, index) => {
-          const active = focus === "all" || focus === project.focus;
-          const Schematic = index === 0 ? PipelineSchematic : CloudSchematic;
-          return (
-            <article
+        <div className="mt-12 space-y-8">
+          {projects.map((project, index) => (
+            <motion.article
               key={project.id}
               id={project.id}
-              className={`scroll-mt-24 grid items-center gap-8 border-t border-bone/10 pt-10 transition-opacity duration-500 lg:grid-cols-2 ${
-                active ? "opacity-100" : "opacity-30"
-              }`}
+              initial={reduce ? false : { opacity: 0, y: 32 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.25 }}
+              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+              className="overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.03] shadow-[0_30px_120px_rgba(0,0,0,0.35)]"
             >
-              <div className={index % 2 === 1 ? "lg:order-2" : ""}>
-                <p className="font-mono text-[11px] tracking-[0.22em] text-bone/40 uppercase">Trace {project.index}</p>
-                <h3 className="mt-3 font-serif text-4xl leading-tight md:text-5xl">{project.title}</h3>
-                <p className="mt-4 max-w-xl text-base leading-relaxed text-bone/75">{project.problem}</p>
-                <p className="mt-5 font-mono text-xs tracking-[0.08em] text-bone/55 uppercase">
-                  {project.techStack.join(" · ")}
-                </p>
-                <a
-                  href={project.githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-6 inline-flex font-mono text-xs tracking-[0.18em] text-signal uppercase underline decoration-signal/50 underline-offset-4 hover:text-bone"
-                >
-                  View code
-                </a>
+              <div className="grid lg:grid-cols-[0.9fr_1.1fr]">
+                <div className="flex flex-col justify-between p-7 md:p-12">
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.28em] text-white/40">0{index + 1}</p>
+                    <h3 className="mt-4 font-serif text-4xl leading-tight tracking-tight md:text-5xl">{project.title}</h3>
+                    <p className="mt-5 max-w-md text-base leading-relaxed text-white/70">{project.problem}</p>
+                    <ul className="mt-6 flex flex-wrap gap-2">
+                      {project.techStack.map((tech) => (
+                        <li key={tech} className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/75">
+                          {tech}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="mt-10 flex flex-wrap items-end justify-between gap-6">
+                    <dl className="flex gap-8">
+                      {project.metrics.map((metric) => (
+                        <div key={metric.label}>
+                          <dd className="font-serif text-4xl text-[#e8a06a]">{metric.value}</dd>
+                          <dt className="mt-1 max-w-[8rem] text-[10px] uppercase tracking-[0.16em] text-white/45">{metric.label}</dt>
+                        </div>
+                      ))}
+                    </dl>
+                    <a
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="rounded-full bg-white px-5 py-3 text-sm font-medium text-black transition hover:bg-[#e8a06a]"
+                    >
+                      View code
+                    </a>
+                  </div>
+                </div>
+                <StageVisual index={index} />
               </div>
-
-              <div>
-                <Frame className="bg-surface/50 p-4 md:p-6">
-                  <Schematic />
-                </Frame>
-                <dl className="mt-6 grid grid-cols-2 gap-6">
-                  {project.metrics.map((metric) => (
-                    <div key={metric.label}>
-                      <dd className="font-serif text-4xl text-spark md:text-5xl">{metric.value}</dd>
-                      <dt className="mt-1 font-mono text-[10px] tracking-[0.16em] text-bone/50 uppercase">{metric.label}</dt>
-                    </div>
-                  ))}
-                </dl>
-              </div>
-            </article>
-          );
-        })}
+            </motion.article>
+          ))}
+        </div>
       </div>
     </section>
   );

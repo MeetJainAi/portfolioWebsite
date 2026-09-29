@@ -1,61 +1,60 @@
 "use client";
 
 import { skillGroups } from "@/data/portfolio";
-import { useFocus } from "./focus";
 
-function cellTone(level: number) {
-  const t = (Math.min(100, Math.max(75, level)) - 75) / 25;
-  const mix = (from: number, to: number) => Math.round(from + (to - from) * t);
-  const r = mix(0x3a, 0xc8);
-  const g = mix(0x42, 0xf5);
-  const b = mix(0x14, 0x4b);
-  const luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
-  return {
-    backgroundColor: `rgb(${r}, ${g}, ${b})`,
-    color: luminance > 0.62 ? "#12110E" : "#F4F0E6",
-  };
-}
+const tones = [
+  "from-[#3a2418]/80 to-white/[0.03]",
+  "from-[#102833]/90 to-white/[0.03]",
+  "from-[#221838]/90 to-white/[0.03]",
+  "from-[#1a2410]/90 to-white/[0.03]",
+];
 
 export default function Stack() {
-  const { focus } = useFocus();
-  const dimmed = focus !== "all";
+  const names = skillGroups.flatMap((group) => group.skills.map((skill) => skill.name));
+  const loop = [...names, ...names];
 
   return (
-    <section
-      id="stack"
-      className={`scroll-mt-16 border-t border-bone/10 px-5 py-20 transition-opacity duration-500 md:scroll-mt-10 md:px-10 md:py-28 ${
-        dimmed ? "opacity-30" : "opacity-100"
-      }`}
-    >
-      <p className="font-mono text-[11px] tracking-[0.28em] text-signal uppercase">02 / Stack</p>
-      <h2 className="mt-3 font-serif text-5xl tracking-tight md:text-7xl">Activation map</h2>
-      <p className="mt-4 max-w-xl text-bone/65">
-        Brightness follows proficiency. Every cell is a tool used to ship the work above.
-      </p>
+    <section id="stack" className="scroll-mt-24 border-t border-white/10 py-24 md:py-32">
+      <div className="overflow-hidden border-y border-white/10 bg-white/[0.02] py-4">
+        <div className="ticker flex w-max gap-8 pr-8">
+          {loop.map((name, index) => (
+            <span key={`${name}-${index}`} className="font-serif text-2xl text-white/55 md:text-3xl">
+              {name}
+              <span className="mx-8 text-[#e8a06a]">✦</span>
+            </span>
+          ))}
+        </div>
+      </div>
 
-      <div className="mt-12 space-y-8">
-        {skillGroups.map((group) => (
-          <div key={group.id} className="grid gap-4 md:grid-cols-[7rem_1fr] md:items-start">
-            <h3 className="font-mono text-[11px] tracking-[0.22em] text-bone/50 uppercase">{group.label}</h3>
-            <ul className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
-              {group.skills.map((skill) => {
-                const tone = cellTone(skill.level);
-                return (
+      <div className="mx-auto mt-16 max-w-6xl px-5 md:px-8">
+        <p className="text-xs uppercase tracking-[0.32em] text-[#e8a06a]">Stack</p>
+        <h2 className="mt-3 max-w-3xl font-serif text-5xl leading-[0.95] tracking-tight md:text-7xl">Tools with a pulse.</h2>
+        <p className="mt-4 max-w-xl text-white/65">Brightness is the level. The brighter the chip, the more time it has spent in production.</p>
+
+        <div className="mt-12 grid gap-4 md:grid-cols-2">
+          {skillGroups.map((group, index) => (
+            <div key={group.id} className={`rounded-[28px] border border-white/10 bg-gradient-to-br ${tones[index]} p-6 md:p-8`}>
+              <h3 className="font-serif text-3xl">{group.label}</h3>
+              <ul className="mt-6 flex flex-wrap gap-2">
+                {group.skills.map((skill) => (
                   <li key={skill.name}>
-                    <div
-                      className="flex h-24 flex-col justify-between border border-black/20 p-3"
-                      style={tone}
+                    <span
+                      className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/30 px-3 py-2 text-sm backdrop-blur-md"
                       aria-label={`${skill.name}, ${skill.level} percent`}
                     >
-                      <span className="font-mono text-[10px] tracking-[0.14em]">{skill.level}%</span>
-                      <span className="font-serif text-lg leading-tight">{skill.name}</span>
-                    </div>
+                      <span
+                        className="h-2 w-2 rounded-full bg-[#e8a06a]"
+                        style={{ boxShadow: `0 0 ${6 + skill.level / 8}px ${2 + skill.level / 40}px rgba(232,160,106,${0.25 + skill.level / 250})` }}
+                      />
+                      {skill.name}
+                      <span className="text-xs text-white/45">{skill.level}</span>
+                    </span>
                   </li>
-                );
-              })}
-            </ul>
-          </div>
-        ))}
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

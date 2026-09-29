@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { rail } from "@/data/portfolio";
 
 export default function Rail() {
+  const [open, setOpen] = useState(false);
   const [active, setActive] = useState("signal");
 
   useEffect(() => {
@@ -18,7 +19,7 @@ export default function Rail() {
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
         if (visible?.target.id) setActive(visible.target.id);
       },
-      { rootMargin: "-45% 0px -45% 0px", threshold: [0, 0.2, 0.5, 1] }
+      { rootMargin: "-40% 0px -45% 0px", threshold: [0.15, 0.4, 0.7] }
     );
 
     sections.forEach((section) => observer.observe(section));
@@ -26,74 +27,63 @@ export default function Rail() {
   }, []);
 
   const jump = (id: string) => {
+    setOpen(false);
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    document.getElementById(id)?.scrollIntoView({
-      behavior: reduce ? "auto" : "smooth",
-      block: "start",
-    });
+    document.getElementById(id)?.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
   };
 
   return (
     <>
-      <nav
-        aria-label="Sections"
-        className="fixed inset-x-0 top-0 z-40 border-b border-bone/10 bg-ground/85 backdrop-blur-md md:hidden"
-      >
-        <ul className="flex justify-between gap-0 overflow-x-auto px-2 py-2">
-          {rail.map((item) => (
-            <li key={item.id}>
+      <header className="fixed left-0 right-0 top-0 z-40 px-4 pt-4 md:px-8">
+        <div className="mx-auto flex max-w-6xl items-center justify-between rounded-full border border-white/10 bg-black/45 px-3 py-2 shadow-[0_20px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl">
+          <button type="button" onClick={() => jump("signal")} className="px-3 font-serif text-lg tracking-tight">
+            Meet Shah
+          </button>
+          <nav className="hidden items-center gap-1 md:flex" aria-label="Sections">
+            {rail.map((item) => (
               <button
+                key={item.id}
                 type="button"
                 onClick={() => jump(item.id)}
-                className={`whitespace-nowrap px-1 py-2 font-mono text-[10px] tracking-[0.08em] uppercase ${
-                  active === item.id ? "text-signal" : "text-bone/55"
+                className={`rounded-full px-3 py-1.5 text-sm transition ${
+                  active === item.id ? "bg-white text-black" : "text-white/70 hover:bg-white/10 hover:text-white"
                 }`}
                 aria-current={active === item.id ? "true" : undefined}
               >
-                {item.index} {item.label}
+                {item.label}
               </button>
-            </li>
-          ))}
-        </ul>
-      </nav>
+            ))}
+          </nav>
+          <button
+            type="button"
+            className="rounded-full border border-white/15 px-3 py-1.5 text-sm md:hidden"
+            aria-expanded={open}
+            onClick={() => setOpen((value) => !value)}
+          >
+            {open ? "Close" : "Menu"}
+          </button>
+        </div>
+      </header>
 
-      <aside className="fixed bottom-0 left-0 top-0 z-40 hidden w-28 flex-col justify-between border-r border-bone/10 bg-ground/80 px-3 py-8 md:flex">
-        <p className="font-mono text-[10px] tracking-[0.32em] text-signal">MEET</p>
-        <nav aria-label="Sections">
-          <ul className="flex flex-col gap-5">
-            {rail.map((item) => {
-              const isActive = active === item.id;
-              return (
+      {open && (
+        <div className="fixed inset-0 z-30 flex flex-col justify-end bg-[#07070b]/92 px-6 pb-10 pt-28 backdrop-blur-xl md:hidden">
+          <nav aria-label="Sections">
+            <ul className="space-y-2">
+              {rail.map((item) => (
                 <li key={item.id}>
                   <button
                     type="button"
                     onClick={() => jump(item.id)}
-                    className="group flex items-center gap-2 text-left"
-                    aria-current={isActive ? "true" : undefined}
+                    className="font-serif text-5xl tracking-tight text-white"
                   >
-                    <span
-                      className={`h-1.5 w-1.5 ${isActive ? "bg-signal" : "bg-bone/25 group-hover:bg-bone/70"}`}
-                    />
-                    <span className="flex flex-col">
-                      <span className="font-mono text-[10px] tracking-[0.18em] text-bone/40">{item.index}</span>
-                      <span
-                        className={`font-mono text-[11px] tracking-[0.14em] uppercase ${
-                          isActive ? "text-bone" : "text-bone/55 group-hover:text-bone"
-                        }`}
-                      >
-                        {item.label}
-                      </span>
-                    </span>
+                    {item.label}
                   </button>
                 </li>
-              );
-            })}
-          </ul>
-        </nav>
-        <p className="font-mono text-[10px] tracking-[0.28em] text-bone/35 [writing-mode:vertical-rl] rotate-180">
-          MODEL CARD
-        </p>
-      </aside>
+              ))}
+            </ul>
+          </nav>
+        </div>
+      )}
     </>
   );
 }
