@@ -1,108 +1,96 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
-import dynamic from "next/dynamic";
-import { profile, stats, ticker } from "@/data/portfolio";
-import { speechRef, subscribeSpeech } from "@/components/agent/signals";
-import { useEffect, useState } from "react";
-
-const AgentCanvas = dynamic(() => import("@/components/agent/AgentCanvas"), {
-  ssr: false,
-  loading: () => <div className="h-full w-full" />,
-});
+import gsap from "gsap";
+import { useEffect, useRef } from "react";
+import { profile, projects, stats } from "@/data/portfolio";
 
 export default function Signal() {
-  const reduce = useReducedMotion();
-  const [speech, setSpeech] = useState(speechRef.current);
+  const root = useRef<HTMLElement>(null);
+  const featured = projects[0];
 
-  useEffect(() => subscribeSpeech(() => setSpeech(speechRef.current)), []);
+  useEffect(() => {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce || !root.current) return;
 
-  const jump = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
-  };
+    const ctx = gsap.context(() => {
+      gsap.from(".hero-line", {
+        yPercent: 110,
+        duration: 1.05,
+        stagger: 0.08,
+        ease: "power4.out",
+      });
+      gsap.from(".hero-fade", {
+        y: 16,
+        opacity: 0,
+        duration: 0.8,
+        delay: 0.35,
+        stagger: 0.06,
+        ease: "power3.out",
+      });
+    }, root);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <section id="signal" className="scroll-mt-16">
-      <div className="grid lg:grid-cols-[minmax(0,1fr)_minmax(280px,42vw)]">
-        <div className="flex flex-col justify-center px-5 py-14 md:px-8 lg:min-h-[calc(100svh-4rem)] lg:px-12 lg:py-20">
-          <motion.p
-            initial={reduce ? false : { opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="font-mono text-[11px] uppercase tracking-[0.28em] text-[#ffb25a]"
-          >
+    <section id="signal" ref={root} className="scroll-mt-16 px-5 pb-8 pt-10 md:px-8 lg:px-12 lg:pt-14">
+      <div className="mx-auto grid max-w-[1360px] items-end gap-10 lg:grid-cols-12">
+        <div className="lg:col-span-7">
+          <p className="hero-fade font-mono text-[11px] uppercase tracking-[0.28em] text-[#c4622d]">
             {profile.role} · {profile.location}
-          </motion.p>
-          <motion.h1
-            initial={reduce ? false : { opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-5 font-serif text-[clamp(4.4rem,8vw,7.4rem)] leading-[0.84] tracking-[-0.045em]"
-          >
-            Meet
-            <span className="block italic text-[#5ee0b5]">Shah</span>
-          </motion.h1>
-          <motion.p
-            initial={reduce ? false : { opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.16 }}
-            className="mt-8 max-w-xl text-[17px] leading-[1.7] text-[#d9d3c8]"
-          >
-            {profile.summary}
-          </motion.p>
-          <motion.p
-            initial={reduce ? false : { opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.28 }}
-            className="mt-4 max-w-xl text-[15px] leading-relaxed text-[#a39cab]"
-          >
-            {profile.agentLine}
-          </motion.p>
-          <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
-            <button type="button" onClick={() => jump("systems")} className="bg-[#ffb25a] px-5 py-3 text-sm text-[#1a1208] transition-colors duration-300 hover:bg-[#5ee0b5]">
+          </p>
+          <h1 className="mt-4 font-serif text-[clamp(4.4rem,8vw,7rem)] leading-[0.84] tracking-[-0.045em]">
+            <span className="block overflow-hidden">
+              <span className="hero-line block">Meet</span>
+            </span>
+            <span className="block overflow-hidden">
+              <span className="hero-line block italic text-[#1c2b4a]">Shah</span>
+            </span>
+          </h1>
+          <p className="hero-fade mt-8 max-w-xl text-[17px] leading-[1.7] text-[#3c3832]">{profile.summary}</p>
+          <p className="hero-fade mt-3 max-w-xl text-[15px] leading-relaxed text-[#5e584f]">{profile.agentLine}</p>
+          <div className="hero-fade mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
+            <a href="#systems" className="bg-[#14120f] px-5 py-3 text-sm text-[#f3efe6] transition-colors duration-300 hover:bg-[#c4622d]">
               View the systems
-            </button>
+            </a>
             {profile.links.map((link) => (
-              <a key={link.label} href={link.href} className="text-sm text-[#f4efe6]" target={link.href.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer">
+              <a
+                key={link.label}
+                href={link.href}
+                className="text-sm"
+                target={link.href.startsWith("http") ? "_blank" : undefined}
+                rel="noopener noreferrer"
+              >
                 {link.label} <span className="arrow">↗</span>
               </a>
             ))}
           </div>
-          <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.18em] text-[#a39cab]">
-            {profile.residency} · {profile.availability}
-          </p>
         </div>
 
-        <div className="relative h-[460px] lg:fixed lg:right-0 lg:top-16 lg:h-[calc(100svh-4rem)] lg:w-[42vw]">
-          <div className="absolute inset-0">
-            <AgentCanvas />
-          </div>
-          <p className="pointer-events-none absolute left-5 right-5 top-4 hidden max-w-xs font-mono text-[12px] leading-relaxed text-[#ffb25a] lg:block">
-            {speech}
-          </p>
-        </div>
-      </div>
-
-      <div className="border-y border-white/10 lg:pr-[42vw]">
-        <div className="grid grid-cols-2 md:grid-cols-4">
+        <dl className="grid grid-cols-2 gap-x-6 gap-y-6 lg:col-span-5">
           {stats.map((stat) => (
-            <div key={stat.label} className="border-white/10 px-5 py-6 md:border-l md:px-6 md:first:border-l-0">
-              <p className="font-serif text-4xl tracking-tight text-[#ffb25a] md:text-5xl">{stat.value}</p>
-              <p className="mt-2 max-w-[12rem] text-[12px] leading-snug text-[#a39cab]">{stat.label}</p>
+            <div key={stat.label} className="hero-fade border-t border-[#14120f]/15 pt-3">
+              <dt className="font-serif text-4xl tracking-tight text-[#1c2b4a] md:text-5xl">{stat.value}</dt>
+              <dd className="mt-2 text-[12px] leading-snug text-[#5e584f]">{stat.label}</dd>
             </div>
           ))}
-        </div>
+        </dl>
       </div>
 
-      <div className="overflow-hidden border-b border-white/10 py-3 lg:pr-[42vw]">
-        <div className="ticker-track flex w-max gap-8 pr-8">
-          {[...ticker, ...ticker].map((item, index) => (
-            <span key={`${item}-${index}`} className="font-mono text-[12px] uppercase tracking-[0.18em] text-[#a39cab]">
-              {item}
-            </span>
-          ))}
+      <a href={`#${featured.id}`} className="hero-fade mx-auto mt-12 grid max-w-[1360px] bg-[#1c2b4a] text-[#f3efe6] lg:grid-cols-12">
+        <div className="p-6 md:p-8 lg:col-span-5 lg:p-10">
+          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#e7b89a]">Featured · {featured.kicker}</p>
+          <h2 className="mt-3 font-serif text-4xl tracking-[-0.03em] md:text-6xl">{featured.title}</h2>
         </div>
-      </div>
+        <div className="flex flex-col justify-between p-6 md:p-8 lg:col-span-7 lg:p-10">
+          <p className="max-w-xl text-[16px] leading-[1.7] text-[#f3efe6]/85">{featured.summary}</p>
+          <p className="mt-6 text-sm text-[#e7b89a]">{featured.stack.join("  ·  ")}</p>
+        </div>
+      </a>
+
+      <p className="hero-fade mx-auto mt-4 max-w-[1360px] font-mono text-[11px] uppercase tracking-[0.16em] text-[#5e584f]">
+        {profile.residency} · {profile.availability}
+      </p>
     </section>
   );
 }

@@ -39,12 +39,12 @@ export default function Channel() {
   };
 
   const field =
-    "mt-2 w-full border-b border-[#1a1208]/20 bg-transparent py-3 text-[#1a1208] outline-none transition-colors duration-300 focus:border-[#10241c]";
+    "mt-2 w-full border-b border-[#14120f]/20 bg-transparent py-3 text-[#14120f] outline-none transition-colors duration-300 focus:border-[#c4622d]";
 
   return (
-    <section id="contact" className="scroll-mt-16 lg:pr-[42vw]">
+    <section id="contact" className="scroll-mt-16">
       <div className="grid lg:grid-cols-12">
-        <div className="bg-[#ffb25a] px-5 py-16 text-[#1a1208] md:px-8 lg:col-span-5 lg:px-12 lg:py-20">
+        <div className="bg-[#1c2b4a] px-5 py-16 text-[#f3efe6] md:px-8 lg:col-span-5 lg:px-12 lg:py-20">
           <p className="font-mono text-[11px] uppercase tracking-[0.28em]">05 — Contact</p>
           <h2 className="mt-6 font-serif text-5xl leading-[0.95] tracking-[-0.04em] md:text-6xl">
             Let&apos;s
@@ -64,7 +64,7 @@ export default function Channel() {
             ))}
           </ul>
         </div>
-        <div className="bg-[#f4efe6] px-5 py-16 text-[#1a1208] md:px-8 lg:col-span-7 lg:px-12 lg:py-20">
+        <div className="bg-[#f7f4ee] px-5 py-16 text-[#14120f] md:px-8 lg:col-span-7 lg:px-12 lg:py-20">
           {submitted ? (
             <div>
               <p className="font-serif text-5xl">Message sent.</p>
@@ -90,7 +90,7 @@ export default function Channel() {
                 <textarea id="message" name="message" required rows={5} value={formData.message} onChange={(event) => setFormData((prev) => ({ ...prev, message: event.target.value }))} className={`${field} resize-y`} />
               </label>
               <div className="flex flex-wrap items-center gap-5">
-                <button type="submit" disabled={isSubmitting} className="bg-[#1a1208] px-6 py-3 text-sm text-[#f4efe6] transition-colors duration-300 hover:bg-[#10241c] disabled:opacity-60">
+                <button type="submit" disabled={isSubmitting} className="bg-[#14120f] px-6 py-3 text-sm text-[#f3efe6] transition-colors duration-300 hover:bg-[#c4622d] disabled:opacity-60">
                   {isSubmitting ? "Sending" : "Send message"}
                 </button>
                 {notice && (
