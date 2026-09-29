@@ -1,35 +1,33 @@
 import type { Metadata } from "next";
-import { Inter, Fira_Code } from "next/font/google";
-import Navigation from "@/components/Navigation";
+import { IBM_Plex_Mono, Instrument_Serif, Outfit } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 
-const inter = Inter({ 
+const sans = Outfit({
   subsets: ["latin"],
-  variable: '--font-inter',
+  variable: "--font-sans",
 });
 
-const firaCode = Fira_Code({
+const serif = Instrument_Serif({
   subsets: ["latin"],
-  variable: '--font-fira-code',
+  weight: "400",
+  style: ["normal", "italic"],
+  variable: "--font-serif",
+});
+
+const mono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-mono",
 });
 
 export const metadata: Metadata = {
-  title: "ML Engineer Portfolio",
-  description: "Cloud and Machine Learning Engineer Portfolio",
+  title: "Meet Shah — Cloud & DevOps Engineer",
+  description: "Portfolio of Meet Shah, a cloud and DevOps engineer in Toronto. Terraform, AWS, and agents on Bedrock.",
   icons: {
-    icon: '/favicon.ico',
+    icon: "/favicon.ico",
   },
 };
-
-function ClientLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <>
-      <Navigation />
-      {children}
-    </>
-  );
-}
 
 export default function RootLayout({
   children,
@@ -39,11 +37,9 @@ export default function RootLayout({
   const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
 
   return (
-    <html lang="en" className={`${inter.variable} ${firaCode.variable}`}>
-      <body className={inter.className}>
-        <ClientLayout>
-          {children}
-        </ClientLayout>
+    <html lang="en" className={`${sans.variable} ${serif.variable} ${mono.variable}`}>
+      <body className={sans.className}>
+        {children}
         <Script
           src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"
           strategy="beforeInteractive"

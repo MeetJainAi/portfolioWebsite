@@ -2,99 +2,50 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    --primary: #0A192F;
-    --secondary: #112240;
-    --accent: #64FFDA;
-    --text: #E6F1FF;
-  }
-
-  html {
-    scroll-behavior: smooth;
-    scroll-padding-top: 4rem;
-  }
-  
-  body {
-    @apply bg-gradient-to-b from-[var(--primary)] to-[var(--secondary)] text-[var(--text)];
-    font-family: var(--font-inter);
-  }
-
-  code {
-    font-family: var(--font-fira-code);
-  }
+:root {
+  --night: #101114;
+  --paper: #f4efe4;
+  --signal: #ff5a1f;
+  --tungsten: #f0c14d;
+  --bone: #f7f3ea;
+  --muted: #a39e96;
+  color-scheme: dark;
 }
 
-@layer components {
-  .glass-card {
-    @apply bg-white/5 backdrop-blur-lg border border-white/10 rounded-xl shadow-xl 
-           transition-all duration-300 hover:bg-white/10 hover:border-white/20;
-  }
-  
-  .gradient-text {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-[var(--accent)] via-[#66a6ff] to-[#fad0c4];
-  }
-  
-  .hover-scale {
-    @apply transform transition-all duration-300 hover:scale-105;
-  }
-
-  .section-padding {
-    @apply py-16 md:py-24;
-  }
-
-  .nav-link {
-    @apply relative text-[var(--text)] hover:text-[var(--accent)] transition-colors duration-300;
-  }
-
-  .nav-link::after {
-    content: '';
-    @apply absolute left-0 bottom-0 w-0 h-0.5 bg-[var(--accent)] transition-all duration-300;
-  }
-
-  .nav-link:hover::after {
-    @apply w-full;
-  }
+body {
+  background: var(--night);
+  color: var(--bone);
+  font-family: var(--font-sans), sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-@layer utilities {
-  .preserve-3d {
-    transform-style: preserve-3d;
-  }
-  
-  .perspective {
-    perspective: 1000px;
-  }
-  
-  .backface-hidden {
-    backface-visibility: hidden;
-  }
-  
-  .rotateY-180 {
-    transform: rotateY(180deg);
-  }
-
-  .text-shadow {
-    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  }
-
-  .text-shadow-lg {
-    text-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  }
-
-  .animate-float {
-    animation: float 6s ease-in-out infinite;
-  }
+::selection {
+  background: var(--signal);
+  color: #1a0c06;
 }
 
-@keyframes float {
-  0% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
-  100% {
-    transform: translateY(0px);
+:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 3px;
+}
+
+.arrow {
+  display: inline-block;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+a:hover .arrow,
+button:hover .arrow {
+  transform: translateX(4px);
+}
+
+.tape-fill {
+  transform-origin: left center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arrow {
+    transition: none;
   }
 }
