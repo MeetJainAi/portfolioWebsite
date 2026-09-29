@@ -33,7 +33,7 @@ export const chips: { id: Exclude<FocusId, "all">; label: string; target: string
 ];
 
 export const rail = [
-  { id: "signal", index: "00", label: "Signal" },
+  { id: "signal", index: "00", label: "Top" },
   { id: "work", index: "01", label: "Work" },
   { id: "stack", index: "02", label: "Stack" },
   { id: "proof", index: "03", label: "Proof" },

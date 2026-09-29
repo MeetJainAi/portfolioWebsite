@@ -5,15 +5,7 @@ import { rail } from "@/data/portfolio";
 
 export default function Rail() {
   const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState("signal");
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   useEffect(() => {
     const sections = rail
@@ -27,7 +19,7 @@ export default function Rail() {
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
         if (visible?.target.id) setActive(visible.target.id);
       },
-      { rootMargin: "-30% 0px -55% 0px", threshold: [0.1, 0.3, 0.6] }
+      { rootMargin: "-20% 0px -55% 0px", threshold: [0.15, 0.4] }
     );
 
     sections.forEach((section) => observer.observe(section));
@@ -42,13 +34,10 @@ export default function Rail() {
 
   return (
     <>
-      <header
-        className={`fixed inset-x-0 top-0 z-40 transition-[background-color,border-color] duration-300 ${
-          scrolled ? "border-b border-[var(--line)] bg-[#0c0c0b]/85 backdrop-blur-md" : "border-b border-transparent"
-        }`}
-      >
-        <div className="mx-auto flex h-16 max-w-[1120px] items-center justify-between px-6">
-          <button type="button" onClick={() => jump("signal")} className="text-sm tracking-tight">
+      <header className="sticky top-0 z-40 border-b border-[#1a1612]/10 bg-[#efe6d6]">
+        <div className="mx-auto flex h-[4.25rem] max-w-[1440px] items-center justify-between px-5 sm:px-8 lg:px-14">
+          <button type="button" onClick={() => jump("signal")} className="flex items-center gap-3 text-sm font-medium tracking-tight">
+            <span className="grid h-8 w-8 place-items-center bg-[#16382f] font-serif text-[15px] italic text-[#efe6d6]">M</span>
             Meet Shah
           </button>
           <nav className="hidden items-center gap-7 md:flex" aria-label="Sections">
@@ -57,40 +46,34 @@ export default function Rail() {
                 key={item.id}
                 type="button"
                 onClick={() => jump(item.id)}
-                className={`text-sm transition-colors duration-200 ${
-                  active === item.id ? "text-[var(--ink)]" : "text-[var(--muted)] hover:text-[var(--ink)]"
+                className={`text-sm transition-colors duration-300 ${
+                  active === item.id ? "text-[#e25b38]" : "text-[#5e584f] hover:text-[#1a1612]"
                 }`}
                 aria-current={active === item.id ? "true" : undefined}
               >
+                <span className="mr-1.5 font-mono text-[10px] tracking-wider">{item.index}</span>
                 {item.label}
               </button>
             ))}
           </nav>
-          <button
-            type="button"
-            className="text-sm text-[var(--muted)] md:hidden"
-            aria-expanded={open}
-            onClick={() => setOpen((value) => !value)}
-          >
+          <button type="button" className="text-sm md:hidden" aria-expanded={open} onClick={() => setOpen((value) => !value)}>
             {open ? "Close" : "Menu"}
           </button>
         </div>
       </header>
 
       {open && (
-        <div className="fixed inset-0 z-30 bg-[#0c0c0b] px-6 pt-24 md:hidden">
-          <nav aria-label="Sections">
-            <ul>
-              {rail.map((item) => (
-                <li key={item.id} className="border-t border-[var(--line)]">
-                  <button type="button" onClick={() => jump(item.id)} className="flex w-full items-baseline gap-4 py-5 text-left">
-                    <span className="w-8 text-sm text-[var(--accent)]">{item.index}</span>
-                    <span className="font-serif text-4xl">{item.label}</span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </nav>
+        <div className="fixed inset-0 z-30 bg-[#efe6d6] px-6 pt-24 md:hidden">
+          <ul>
+            {rail.map((item) => (
+              <li key={item.id} className="border-t border-[#1a1612]/10">
+                <button type="button" onClick={() => jump(item.id)} className="flex w-full items-baseline gap-4 py-4 text-left">
+                  <span className="w-8 font-mono text-sm text-[#e25b38]">{item.index}</span>
+                  <span className="font-serif text-4xl">{item.label}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
         </div>
       )}
     </>

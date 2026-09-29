@@ -1,35 +1,46 @@
 import { skillGroups } from "@/data/portfolio";
 import Reveal from "./Reveal";
 
+const tiles = [
+  { span: "md:col-span-7", ground: "bg-[#16382f] text-[#efe6d6]", min: "min-h-[300px] md:min-h-[340px]" },
+  { span: "md:col-span-5", ground: "bg-[#e25b38] text-[#efe6d6]", min: "min-h-[260px]" },
+  { span: "md:col-span-5", ground: "bg-[#e8d3a4] text-[#1a1612]", min: "min-h-[260px]" },
+  { span: "md:col-span-7", ground: "bg-[#1a1612] text-[#efe6d6]", min: "min-h-[300px] md:min-h-[340px]" },
+];
+
 export default function Stack() {
   return (
-    <section id="stack" className="scroll-mt-16 border-t border-[var(--line)]">
-      <div className="mx-auto max-w-[1120px] px-6 py-24 md:py-32">
+    <section id="stack" className="scroll-mt-[4.25rem] bg-[#efe6d6] px-5 py-20 sm:px-8 md:py-28">
+      <div className="mx-auto max-w-[1440px] lg:px-6">
         <Reveal>
-          <p className="text-[12px] uppercase tracking-[0.18em] text-[var(--muted)]">Stack</p>
-          <h2 className="mt-4 font-serif text-5xl leading-[1.02] tracking-[-0.03em] md:text-6xl">Practice</h2>
-          <p className="mt-5 max-w-md text-[16px] leading-[1.7] text-[#c8c4ba]">
-            A working set. The mark is relative proficiency, not a scoreboard.
-          </p>
+          <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-[#e25b38]">02 — Stack</p>
+          <h2 className="mt-3 font-serif text-5xl tracking-[-0.04em] md:text-7xl">The working set</h2>
         </Reveal>
 
-        <div className="mt-14 grid gap-x-16 gap-y-14 md:grid-cols-2">
-          {skillGroups.map((group, groupIndex) => (
-            <Reveal key={group.id} delay={groupIndex * 0.04}>
-              <h3 className="border-b border-[var(--line)] pb-3 text-sm uppercase tracking-[0.16em] text-[var(--muted)]">{group.label}</h3>
-              <ul className="mt-2">
-                {group.skills.map((skill) => (
-                  <li key={skill.name} className="grid grid-cols-[minmax(0,8.5rem)_1fr_2rem] items-center gap-4 border-b border-[var(--line)] py-3">
-                    <span className="text-sm">{skill.name}</span>
-                    <span className="relative h-px bg-white/10" aria-hidden>
-                      <span className="absolute inset-y-[-0.5px] left-0 bg-[#f2f0ea]" style={{ width: `${skill.level}%` }} />
-                    </span>
-                    <span className="text-right text-sm tabular-nums text-[var(--muted)]">{skill.level}</span>
-                  </li>
-                ))}
-              </ul>
-            </Reveal>
-          ))}
+        <div className="mt-12 grid gap-3 md:grid-cols-12">
+          {skillGroups.map((group, index) => {
+            const tile = tiles[index];
+            const ranked = [...group.skills].sort((a, b) => b.level - a.level);
+            const leads = ranked.slice(0, 2);
+            const rest = ranked.slice(2);
+            return (
+              <Reveal key={group.id} delay={index * 0.05} className={tile.span}>
+                <article className={`flex h-full flex-col justify-between p-7 transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 md:p-9 ${tile.ground} ${tile.min}`}>
+                  <p className="font-mono text-[11px] uppercase tracking-[0.22em] opacity-70">{group.label}</p>
+                  <div>
+                    <div className="flex flex-wrap items-end gap-x-6 gap-y-2">
+                      {leads.map((skill) => (
+                        <p key={skill.name} className="font-serif text-[clamp(2rem,4vw,3.25rem)] leading-none tracking-[-0.03em]">
+                          {skill.name}
+                        </p>
+                      ))}
+                    </div>
+                    <p className="mt-6 max-w-lg text-sm leading-relaxed opacity-80">{rest.map((skill) => skill.name).join("  ·  ")}</p>
+                  </div>
+                </article>
+              </Reveal>
+            );
+          })}
         </div>
       </div>
     </section>

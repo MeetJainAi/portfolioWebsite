@@ -23,7 +23,7 @@ const mono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   title: "Meet Shah — Cloud & ML Engineer",
-  description: "Model card for Meet Shah, a cloud and machine learning engineer.",
+  description: "Portfolio of Meet Shah, a cloud and machine learning engineer.",
   icons: {
     icon: "/favicon.ico",
   },
