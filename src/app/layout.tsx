@@ -22,8 +22,8 @@ const mono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Meet Shah — Cloud & ML Engineer",
-  description: "Portfolio of Meet Shah, a cloud and machine learning engineer.",
+  title: "Meet Shah — Cloud & DevOps Engineer",
+  description: "Portfolio of Meet Shah, a cloud and DevOps engineer in Toronto. Terraform, AWS, and agents on Bedrock.",
   icons: {
     icon: "/favicon.ico",
   },

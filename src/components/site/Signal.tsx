@@ -1,112 +1,106 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { profile } from "@/data/portfolio";
+import dynamic from "next/dynamic";
+import { profile, stats, ticker } from "@/data/portfolio";
+import { speechRef, subscribeSpeech } from "@/components/agent/signals";
+import { useEffect, useState } from "react";
 
-function Poster() {
-  const ticks = Array.from({ length: 14 }, (_, index) => index);
-
-  return (
-    <svg className="absolute inset-0 h-full w-full" viewBox="0 0 640 860" preserveAspectRatio="xMidYMid slice" aria-hidden>
-      <g stroke="#e8d3a4" strokeWidth="1.25" fill="none" opacity="0.75">
-        <path d="M32 56 H54 M32 56 V78" />
-        <path d="M608 56 H586 M608 56 V78" />
-        <path d="M32 620 H54 M32 620 V598" />
-        <path d="M608 620 H586 M608 620 V598" />
-      </g>
-      <g stroke="#e8d3a4" strokeOpacity="0.4">
-        {ticks.map((tick) => (
-          <line key={tick} x1="58" x2={tick % 3 === 0 ? 76 : 68} y1={96 + tick * 34} y2={96 + tick * 34} />
-        ))}
-      </g>
-      <circle cx="372" cy="236" r="176" fill="none" stroke="#efe6d6" strokeOpacity="0.22" strokeWidth="1.25" />
-      <circle cx="338" cy="214" r="104" fill="none" stroke="#e8d3a4" strokeOpacity="0.5" strokeWidth="1.25" />
-      <rect x="0" y="332" width="236" height="14" fill="#e25b38" />
-      <circle cx="196" cy="486" r="52" fill="#e8d3a4" />
-      <circle cx="196" cy="486" r="16" fill="#16382f" />
-      <path d="M196 486 C 270 430, 340 340, 430 286" fill="none" stroke="#efe6d6" strokeOpacity="0.4" strokeWidth="1.25" />
-      <g className="drift">
-        <circle cx="448" cy="198" r="84" fill="#e25b38" />
-      </g>
-    </svg>
-  );
-}
+const AgentCanvas = dynamic(() => import("@/components/agent/AgentCanvas"), {
+  ssr: false,
+  loading: () => <div className="h-full w-full" />,
+});
 
 export default function Signal() {
   const reduce = useReducedMotion();
+  const [speech, setSpeech] = useState(speechRef.current);
+
+  useEffect(() => subscribeSpeech(() => setSpeech(speechRef.current)), []);
 
   const jump = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
   };
 
   return (
-    <section id="signal" className="scroll-mt-[4.25rem] bg-[#efe6d6]">
-      <div className="mx-auto grid max-w-[1440px] lg:grid-cols-2">
-        <div className="flex flex-col justify-center px-5 py-16 sm:px-8 lg:px-14 lg:py-24">
+    <section id="signal" className="scroll-mt-16">
+      <div className="grid lg:grid-cols-[minmax(0,1fr)_minmax(280px,42vw)]">
+        <div className="flex flex-col justify-center px-5 py-14 md:px-8 lg:min-h-[calc(100svh-4rem)] lg:px-12 lg:py-20">
           <motion.p
             initial={reduce ? false : { opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="font-mono text-[11px] uppercase tracking-[0.28em] text-[#e25b38]"
+            className="font-mono text-[11px] uppercase tracking-[0.28em] text-[#ffb25a]"
           >
-            {profile.role}
+            {profile.role} · {profile.location}
           </motion.p>
           <motion.h1
-            initial={reduce ? false : { opacity: 0, y: 16 }}
+            initial={reduce ? false : { opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.85, delay: 0.06, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-5 font-serif text-[clamp(4.75rem,8vw,7.5rem)] leading-[0.82] tracking-[-0.045em]"
+            transition={{ duration: 0.9, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+            className="mt-5 font-serif text-[clamp(4.4rem,8vw,7.4rem)] leading-[0.84] tracking-[-0.045em]"
           >
             Meet
-            <span className="block italic text-[#16382f]">Shah</span>
+            <span className="block italic text-[#5ee0b5]">Shah</span>
           </motion.h1>
           <motion.p
             initial={reduce ? false : { opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.14, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-8 max-w-[26rem] text-[17px] leading-[1.7] text-[#3c3832]"
+            transition={{ duration: 0.8, delay: 0.16 }}
+            className="mt-8 max-w-xl text-[17px] leading-[1.7] text-[#d9d3c8]"
           >
-            {profile.bio}
+            {profile.summary}
           </motion.p>
-          <motion.div
+          <motion.p
             initial={reduce ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.7, delay: 0.24 }}
-            className="mt-10 flex flex-wrap items-center gap-x-7 gap-y-3"
+            transition={{ delay: 0.28 }}
+            className="mt-4 max-w-xl text-[15px] leading-relaxed text-[#a39cab]"
           >
-            <button
-              type="button"
-              onClick={() => jump("work")}
-              className="bg-[#1a1612] px-5 py-3 text-sm text-[#efe6d6] transition-colors duration-300 hover:bg-[#e25b38]"
-            >
-              View the work
+            {profile.agentLine}
+          </motion.p>
+          <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
+            <button type="button" onClick={() => jump("systems")} className="bg-[#ffb25a] px-5 py-3 text-sm text-[#1a1208] transition-colors duration-300 hover:bg-[#5ee0b5]">
+              View the systems
             </button>
             {profile.links.map((link) => (
-              <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer" className="link-line text-sm text-[#1a1612]">
-                {link.label}
-                <span className="arrow"> ↗</span>
+              <a key={link.label} href={link.href} className="text-sm text-[#f4efe6]" target={link.href.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer">
+                {link.label} <span className="arrow">↗</span>
               </a>
             ))}
-          </motion.div>
+          </div>
+          <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.18em] text-[#a39cab]">
+            {profile.residency} · {profile.availability}
+          </p>
         </div>
 
-        <div className="relative px-5 pb-8 sm:px-8 lg:px-0 lg:py-8 lg:pr-8">
-          <div className="relative min-h-[540px] lg:min-h-[calc(100svh-8.5rem)]">
-            <div className="absolute inset-0 overflow-hidden bg-[#16382f]">
-              <Poster />
-              <p className="absolute left-6 top-6 font-mono text-[11px] uppercase tracking-[0.22em] text-[#e8d3a4]">
-                Fig. 01 — Systems
-              </p>
-            </div>
-            <div className="absolute bottom-5 left-5 right-5 grid grid-cols-3 gap-3 bg-[#e8d3a4] p-4 text-[#1a1612] shadow-[0_22px_50px_rgba(22,16,12,0.18)] sm:p-5 lg:-left-14 lg:bottom-8 lg:right-6 lg:gap-4 lg:p-6">
-              {profile.stats.map((stat) => (
-                <div key={stat.label}>
-                  <p className="font-serif text-[clamp(1.7rem,3vw,2.7rem)] leading-none tracking-tight">{stat.value}</p>
-                  <p className="mt-2 text-[11px] leading-snug text-[#3c3832]">{stat.label}</p>
-                </div>
-              ))}
-            </div>
+        <div className="relative h-[460px] lg:fixed lg:right-0 lg:top-16 lg:h-[calc(100svh-4rem)] lg:w-[42vw]">
+          <div className="absolute inset-0">
+            <AgentCanvas />
           </div>
+          <p className="pointer-events-none absolute left-5 right-5 top-4 hidden max-w-xs font-mono text-[12px] leading-relaxed text-[#ffb25a] lg:block">
+            {speech}
+          </p>
+        </div>
+      </div>
+
+      <div className="border-y border-white/10 lg:pr-[42vw]">
+        <div className="grid grid-cols-2 md:grid-cols-4">
+          {stats.map((stat) => (
+            <div key={stat.label} className="border-white/10 px-5 py-6 md:border-l md:px-6 md:first:border-l-0">
+              <p className="font-serif text-4xl tracking-tight text-[#ffb25a] md:text-5xl">{stat.value}</p>
+              <p className="mt-2 max-w-[12rem] text-[12px] leading-snug text-[#a39cab]">{stat.label}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="overflow-hidden border-b border-white/10 py-3 lg:pr-[42vw]">
+        <div className="ticker-track flex w-max gap-8 pr-8">
+          {[...ticker, ...ticker].map((item, index) => (
+            <span key={`${item}-${index}`} className="font-mono text-[12px] uppercase tracking-[0.18em] text-[#a39cab]">
+              {item}
+            </span>
+          ))}
         </div>
       </div>
     </section>
