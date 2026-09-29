@@ -3,6 +3,11 @@
 @tailwind utilities;
 
 :root {
+  --bg: #0c0c0b;
+  --ink: #f2f0ea;
+  --muted: #8d8a82;
+  --line: rgba(242, 240, 234, 0.12);
+  --accent: #c6a57a;
   color-scheme: dark;
 }
 
@@ -11,33 +16,35 @@ html {
 }
 
 body {
-  background: #07070b;
-  color: #f6f1ea;
+  background: var(--bg);
+  color: var(--ink);
   font-family: var(--font-sans), sans-serif;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 ::selection {
-  background: #e8a06a;
-  color: #07070b;
+  background: var(--accent);
+  color: #0c0c0b;
 }
 
 :focus-visible {
-  outline: 2px solid #e8a06a;
+  outline: 1px solid var(--accent);
   outline-offset: 3px;
 }
 
-.ticker {
-  animation: ticker 42s linear infinite;
+.rule {
+  background: var(--line);
 }
 
-@keyframes ticker {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
+.arrow {
+  display: inline-block;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+a:hover .arrow,
+button:hover .arrow {
+  transform: translateX(4px);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -45,7 +52,7 @@ body {
     scroll-behavior: auto;
   }
 
-  .ticker {
-    animation: none;
+  .arrow {
+    transition: none;
   }
 }

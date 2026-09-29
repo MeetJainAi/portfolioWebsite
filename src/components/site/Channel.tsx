@@ -8,13 +8,11 @@ export default function Channel() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
-  const [failed, setFailed] = useState(false);
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setIsSubmitting(true);
     setNotice(null);
-    setFailed(false);
 
     try {
       const response = await fetch("https://submit-form.com/mcTHcnZ80", {
@@ -27,7 +25,6 @@ export default function Channel() {
       });
 
       if (!response.ok) {
-        setFailed(true);
         setNotice("Message did not send. Try again.");
         return;
       }
@@ -35,49 +32,46 @@ export default function Channel() {
       setFormData({ name: "", email: "", message: "" });
       setSubmitted(true);
     } catch {
-      setFailed(true);
       setNotice("Message did not send. Try again.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  const fieldClass =
+    "mt-2 w-full border-b border-[var(--line)] bg-transparent py-3 text-base text-[var(--ink)] outline-none transition-colors duration-200 focus:border-[var(--accent)]";
+
   return (
-    <section id="contact" className="scroll-mt-24 px-5 pb-16 pt-8 md:px-8 md:pb-20">
-      <div className="mx-auto grid max-w-6xl overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.04] lg:grid-cols-[0.85fr_1.15fr]">
-        <div className="relative bg-gradient-to-br from-[#3a2418] via-[#16141c] to-[#101820] p-8 md:p-12">
-          <div className="absolute -left-10 bottom-0 h-48 w-48 rounded-full bg-[#e8a06a]/30 blur-3xl" />
-          <p className="relative text-xs uppercase tracking-[0.32em] text-[#e8a06a]">Contact</p>
-          <h2 className="relative mt-4 font-serif text-5xl leading-[0.95] tracking-tight md:text-6xl">Let&apos;s build the next system.</h2>
-          <p className="relative mt-5 max-w-sm text-white/70">Have an idea? Let&apos;s bring it to life together.</p>
-          <ul className="relative mt-10 space-y-3">
+    <section id="contact" className="scroll-mt-16 border-t border-[var(--line)]">
+      <div className="mx-auto grid max-w-[1120px] gap-16 px-6 py-24 md:py-32 lg:grid-cols-12">
+        <div className="lg:col-span-5">
+          <p className="text-[12px] uppercase tracking-[0.18em] text-[var(--muted)]">Contact</p>
+          <h2 className="mt-4 font-serif text-5xl leading-[1.02] tracking-[-0.03em] md:text-6xl">Write to me.</h2>
+          <p className="mt-6 max-w-sm text-[16px] leading-[1.7] text-[#c8c4ba]">Have an idea? Let&apos;s bring it to life together.</p>
+          <ul className="mt-10 space-y-3">
             {profile.links.map((link) => (
               <li key={link.label}>
-                <a href={link.href} target="_blank" rel="noopener noreferrer" className="text-sm text-white/80 underline decoration-white/20 underline-offset-4 hover:text-white">
-                  {link.label}
+                <a href={link.href} target="_blank" rel="noopener noreferrer" className="text-sm text-[var(--muted)] transition-colors duration-200 hover:text-[var(--ink)]">
+                  {link.label} <span className="arrow">↗</span>
                 </a>
               </li>
             ))}
           </ul>
         </div>
 
-        <div className="p-8 md:p-12">
+        <div className="lg:col-span-6 lg:col-start-7">
           {submitted ? (
-            <div className="flex h-full min-h-[280px] flex-col justify-center">
-              <p className="font-serif text-5xl">Message received.</p>
-              <p className="mt-4 text-white/70">Meet will get back to you.</p>
-              <button
-                type="button"
-                onClick={() => setSubmitted(false)}
-                className="mt-8 w-fit rounded-full bg-white px-5 py-3 text-sm font-medium text-black"
-              >
-                Send another
+            <div>
+              <p className="font-serif text-4xl">Received.</p>
+              <p className="mt-4 text-[#c8c4ba]">Meet will get back to you.</p>
+              <button type="button" onClick={() => setSubmitted(false)} className="mt-8 text-sm">
+                Send another <span className="arrow">→</span>
               </button>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div className="grid gap-5 md:grid-cols-2">
-                <label className="block text-sm text-white/60" htmlFor="name">
+            <form onSubmit={handleSubmit} className="space-y-8">
+              <div className="grid gap-8 md:grid-cols-2">
+                <label className="block text-[12px] uppercase tracking-[0.16em] text-[var(--muted)]" htmlFor="name">
                   Name
                   <input
                     id="name"
@@ -86,10 +80,10 @@ export default function Channel() {
                     autoComplete="name"
                     value={formData.name}
                     onChange={(event) => setFormData((prev) => ({ ...prev, name: event.target.value }))}
-                    className="mt-2 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-base text-white outline-none transition focus:border-[#e8a06a]"
+                    className={fieldClass}
                   />
                 </label>
-                <label className="block text-sm text-white/60" htmlFor="email">
+                <label className="block text-[12px] uppercase tracking-[0.16em] text-[var(--muted)]" htmlFor="email">
                   Email
                   <input
                     id="email"
@@ -99,11 +93,11 @@ export default function Channel() {
                     autoComplete="email"
                     value={formData.email}
                     onChange={(event) => setFormData((prev) => ({ ...prev, email: event.target.value }))}
-                    className="mt-2 w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-base text-white outline-none transition focus:border-[#e8a06a]"
+                    className={fieldClass}
                   />
                 </label>
               </div>
-              <label className="block text-sm text-white/60" htmlFor="message">
+              <label className="block text-[12px] uppercase tracking-[0.16em] text-[var(--muted)]" htmlFor="message">
                 Message
                 <textarea
                   id="message"
@@ -112,19 +106,19 @@ export default function Channel() {
                   rows={5}
                   value={formData.message}
                   onChange={(event) => setFormData((prev) => ({ ...prev, message: event.target.value }))}
-                  className="mt-2 w-full resize-y rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-base text-white outline-none transition focus:border-[#e8a06a]"
+                  className={`${fieldClass} resize-y`}
                 />
               </label>
-              <div className="flex flex-wrap items-center gap-4">
+              <div className="flex flex-wrap items-center gap-5">
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="rounded-full bg-[#e8a06a] px-6 py-3 text-sm font-medium text-black transition hover:bg-white disabled:opacity-60"
+                  className="border border-[var(--ink)] px-5 py-3 text-sm transition-colors duration-200 hover:bg-[var(--ink)] hover:text-[#0c0c0b] disabled:opacity-50"
                 >
-                  {isSubmitting ? "Sending" : "Send message"}
+                  {isSubmitting ? "Sending" : "Send"}
                 </button>
                 {notice && (
-                  <p className={`text-sm ${failed ? "text-[#e8a06a]" : "text-white/70"}`} role="status">
+                  <p className="text-sm text-[var(--accent)]" role="status">
                     {notice}
                   </p>
                 )}
@@ -133,7 +127,10 @@ export default function Channel() {
           )}
         </div>
       </div>
-      <p className="mx-auto mt-8 max-w-6xl text-sm text-white/35">Meet Shah · Cloud and ML engineer</p>
+      <div className="mx-auto flex max-w-[1120px] items-center justify-between border-t border-[var(--line)] px-6 py-6 text-sm text-[var(--muted)]">
+        <p>Meet Shah</p>
+        <p>Cloud and ML</p>
+      </div>
     </section>
   );
 }

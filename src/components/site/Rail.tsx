@@ -5,7 +5,15 @@ import { rail } from "@/data/portfolio";
 
 export default function Rail() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState("signal");
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     const sections = rail
@@ -19,7 +27,7 @@ export default function Rail() {
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
         if (visible?.target.id) setActive(visible.target.id);
       },
-      { rootMargin: "-40% 0px -45% 0px", threshold: [0.15, 0.4, 0.7] }
+      { rootMargin: "-30% 0px -55% 0px", threshold: [0.1, 0.3, 0.6] }
     );
 
     sections.forEach((section) => observer.observe(section));
@@ -34,19 +42,23 @@ export default function Rail() {
 
   return (
     <>
-      <header className="fixed left-0 right-0 top-0 z-40 px-4 pt-4 md:px-8">
-        <div className="mx-auto flex max-w-6xl items-center justify-between rounded-full border border-white/10 bg-black/45 px-3 py-2 shadow-[0_20px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl">
-          <button type="button" onClick={() => jump("signal")} className="px-3 font-serif text-lg tracking-tight">
+      <header
+        className={`fixed inset-x-0 top-0 z-40 transition-[background-color,border-color] duration-300 ${
+          scrolled ? "border-b border-[var(--line)] bg-[#0c0c0b]/85 backdrop-blur-md" : "border-b border-transparent"
+        }`}
+      >
+        <div className="mx-auto flex h-16 max-w-[1120px] items-center justify-between px-6">
+          <button type="button" onClick={() => jump("signal")} className="text-sm tracking-tight">
             Meet Shah
           </button>
-          <nav className="hidden items-center gap-1 md:flex" aria-label="Sections">
+          <nav className="hidden items-center gap-7 md:flex" aria-label="Sections">
             {rail.map((item) => (
               <button
                 key={item.id}
                 type="button"
                 onClick={() => jump(item.id)}
-                className={`rounded-full px-3 py-1.5 text-sm transition ${
-                  active === item.id ? "bg-white text-black" : "text-white/70 hover:bg-white/10 hover:text-white"
+                className={`text-sm transition-colors duration-200 ${
+                  active === item.id ? "text-[var(--ink)]" : "text-[var(--muted)] hover:text-[var(--ink)]"
                 }`}
                 aria-current={active === item.id ? "true" : undefined}
               >
@@ -56,7 +68,7 @@ export default function Rail() {
           </nav>
           <button
             type="button"
-            className="rounded-full border border-white/15 px-3 py-1.5 text-sm md:hidden"
+            className="text-sm text-[var(--muted)] md:hidden"
             aria-expanded={open}
             onClick={() => setOpen((value) => !value)}
           >
@@ -66,17 +78,14 @@ export default function Rail() {
       </header>
 
       {open && (
-        <div className="fixed inset-0 z-30 flex flex-col justify-end bg-[#07070b]/92 px-6 pb-10 pt-28 backdrop-blur-xl md:hidden">
+        <div className="fixed inset-0 z-30 bg-[#0c0c0b] px-6 pt-24 md:hidden">
           <nav aria-label="Sections">
-            <ul className="space-y-2">
+            <ul>
               {rail.map((item) => (
-                <li key={item.id}>
-                  <button
-                    type="button"
-                    onClick={() => jump(item.id)}
-                    className="font-serif text-5xl tracking-tight text-white"
-                  >
-                    {item.label}
+                <li key={item.id} className="border-t border-[var(--line)]">
+                  <button type="button" onClick={() => jump(item.id)} className="flex w-full items-baseline gap-4 py-5 text-left">
+                    <span className="w-8 text-sm text-[var(--accent)]">{item.index}</span>
+                    <span className="font-serif text-4xl">{item.label}</span>
                   </button>
                 </li>
               ))}
