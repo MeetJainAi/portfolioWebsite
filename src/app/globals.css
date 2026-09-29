@@ -3,34 +3,30 @@
 @tailwind utilities;
 
 :root {
-  --paper: #f3efe6;
-  --ink: #14120f;
-  --indigo: #1c2b4a;
-  --copper: #c4622d;
-  --mist: #e5dfd2;
-  --muted: #5e584f;
-  color-scheme: light;
-}
-
-html {
-  scroll-behavior: auto;
+  --night: #101114;
+  --paper: #f4efe4;
+  --signal: #ff5a1f;
+  --tungsten: #f0c14d;
+  --bone: #f7f3ea;
+  --muted: #a39e96;
+  color-scheme: dark;
 }
 
 body {
-  background: var(--paper);
-  color: var(--ink);
+  background: var(--night);
+  color: var(--bone);
   font-family: var(--font-sans), sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
 ::selection {
-  background: var(--copper);
-  color: #f3efe6;
+  background: var(--signal);
+  color: #1a0c06;
 }
 
 :focus-visible {
-  outline: 2px solid var(--copper);
+  outline: 2px solid var(--signal);
   outline-offset: 3px;
 }
 
@@ -42,6 +38,10 @@ body {
 a:hover .arrow,
 button:hover .arrow {
   transform: translateX(4px);
+}
+
+.tape-fill {
+  transform-origin: left center;
 }
 
 @media (prefers-reduced-motion: reduce) {

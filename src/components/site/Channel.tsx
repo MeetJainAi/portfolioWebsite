@@ -44,13 +44,11 @@ export default function Channel() {
   return (
     <section id="contact" className="scroll-mt-16">
       <div className="grid lg:grid-cols-12">
-        <div className="bg-[#1c2b4a] px-5 py-16 text-[#f3efe6] md:px-8 lg:col-span-5 lg:px-12 lg:py-20">
-          <p className="font-mono text-[11px] uppercase tracking-[0.28em]">05 — Contact</p>
-          <h2 className="mt-6 font-serif text-5xl leading-[0.95] tracking-[-0.04em] md:text-6xl">
-            Let&apos;s
-            <span className="block italic">Connect</span>
-          </h2>
+        <div className="bg-[#ff5a1f] px-5 py-16 text-[#1a0c06] md:px-8 lg:col-span-5 lg:px-12 lg:py-20">
+          <p className="font-mono text-[11px] uppercase tracking-[0.28em]">Scene 05 · Hire</p>
+          <h2 className="mt-6 font-serif text-5xl leading-[0.92] tracking-[-0.04em] md:text-6xl">The window is open.</h2>
           <p className="mt-6 max-w-sm text-[16px] leading-[1.7]">Have an idea? Let&apos;s bring it to life together.</p>
+          <p className="mt-3 max-w-sm text-sm leading-relaxed">{profile.availability}. {profile.location}.</p>
           <a href={`mailto:${profile.email}`} className="mt-6 inline-block text-sm">
             {profile.email}
           </a>

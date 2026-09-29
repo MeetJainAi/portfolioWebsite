@@ -25,12 +25,12 @@ export const stats = [
 ];
 
 export const rail = [
-  { id: "signal", index: "00", label: "Signal" },
-  { id: "record", index: "01", label: "Record" },
+  { id: "signal", index: "00", label: "Window" },
+  { id: "record", index: "01", label: "Shift" },
   { id: "systems", index: "02", label: "Systems" },
-  { id: "stack", index: "03", label: "Stack" },
-  { id: "proof", index: "04", label: "Proof" },
-  { id: "contact", index: "05", label: "Contact" },
+  { id: "stack", index: "03", label: "Manifest" },
+  { id: "proof", index: "04", label: "Seatbelt" },
+  { id: "contact", index: "05", label: "Hire" },
 ];
 
 export const roles = [
@@ -84,6 +84,7 @@ export const projects = [
     id: "orin",
     index: "01",
     title: "orin.finance",
+    hook: "The model cites the filing.",
     kicker: "Cloud-native financial analytics",
     summary:
       "Production AWS footprint for a financial analytics platform: Terraform, GitHub Actions, and a Bedrock RAG pipeline that cites source filings.",
@@ -100,6 +101,7 @@ export const projects = [
     id: "autoresearch",
     index: "02",
     title: "Autoresearch Codex Plugin",
+    hook: "A research loop that boots where you are.",
     kicker: "Agent skill for local research loops",
     summary:
       "A portable Codex plugin that bootstraps Karpathy-style autoresearch on a local machine, a VPS, or a small GPU.",
@@ -115,6 +117,7 @@ export const projects = [
     id: "game",
     index: "03",
     title: "AWS Serverless Game",
+    hook: "Auth, scores, and a live board.",
     kicker: "Auth, scores, live leaderboard",
     summary:
       "A cloud-native game platform on AWS with user authentication, score tracking, and a real-time leaderboard.",
